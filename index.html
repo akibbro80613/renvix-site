@@ -1,499 +1,687 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Renvix — AI Automations That Actually Work</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>Renvix — AI Automations That Actually Work</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Kanit', 'sans-serif'],
-          },
-        },
-      },
-    }
-  </script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
 
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/framer-motion@12.38.0/dist/framer-motion.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js">
+    </script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js">
+    </script>
+    <script src="https://unpkg.com/framer-motion@12.38.0/dist/framer-motion.js">
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js">
+    </script>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.157.0/build/three.module.js"
-      }
-    }
-  </script>
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.157.0/build/three.module.js" } }
+    </script>
 
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html,
-    body,
-    #root {
-      background: #0C0C0C;
-      font-family: 'Kanit', sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: clip;
-    }
-    .hero-heading {
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-heading-brand {
-      background: linear-gradient(180deg, #4F8CFF 0%, #A0C4FF 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-  </style>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body,
+        #root {
+            background: #0C0C0C;
+            font-family: 'Kanit', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: clip;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .hero-heading {
+            background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-heading-brand {
+            background: linear-gradient(180deg, #4F8CFF 0%, #A0C4FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .particle-fixed-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .particle-fixed-container canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .content-layer {
+            position: relative;
+            z-index: 1;
+        }
+        .section-relative {
+            position: relative;
+            z-index: 1;
+        }
+        .marquee-img {
+            border-radius: 1rem;
+            object-fit: cover;
+            flex-shrink: 0;
+            display: block;
+        }
+        @media (min-width: 640px) {
+            .marquee-img {
+                border-radius: 1.25rem;
+            }
+        }
+        @media (min-width: 768px) {
+            .marquee-img {
+                border-radius: 1.5rem;
+            }
+        }
+        .white-curve-top {
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+        }
+        @media (min-width: 640px) {
+            .white-curve-top {
+                border-top-left-radius: 40px;
+                border-top-right-radius: 40px;
+            }
+        }
+        @media (min-width: 768px) {
+            .white-curve-top {
+                border-top-left-radius: 60px;
+                border-top-right-radius: 60px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="root"></div>
+    <div id="root"></div>
 
-  <script type="text/babel" data-presets="react">
-    const { motion, useScroll, useTransform } = window.Motion;
+    <script type="text/babel" data-presets="react">
+        const { motion, useScroll, useTransform } = window.Motion;
 
-    // ── ICONS ──
-    const ArrowUpRight = ({ className = "w-4 h-4" }) => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
-      </svg>
-    );
+        // ── ICONS ──
+        const ArrowUpRight = ({ className = "w-4 h-4" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
+            </svg>
+        );
 
-    const InstagramIcon = ({ className = "w-5 h-5" }) => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-      </svg>
-    );
+        const InstagramIcon = ({ className = "w-5 h-5" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5"
+                y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+        );
 
-    const CheckCircleIcon = ({ className = "w-5 h-5" }) => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
-      </svg>
-    );
+        const CheckCircleIcon = ({ className = "w-5 h-5" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+        );
 
-    // ── REUSABLE COMPONENTS ──
-    const FadeIn = ({ children, delay = 0, duration = 0.7, x = 0, y = 30, className = "", as: Tag = "div" }) => {
-      const MotionTag = motion[Tag] || motion.div;
-      return (
-        <MotionTag
-          initial={{ opacity: 0, y, x }}
-          whileInView={{ opacity: 1, y: 0, x: 0 }}
-          viewport={{ once: false, margin: "50px", amount: 0.1 }}
-          transition={{ delay, duration, ease: [0.25, 0.1, 0.25, 1] }}
-          className={className}
-        >
-          {children}
-        </MotionTag>
-      );
-    };
-
-    const PrimaryButton = ({ className = "", children, href = "#" }) => (
-      <a href={href} className={`rounded-full text-white font-medium uppercase tracking-widest flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 text-xs sm:text-sm md:text-base transition-opacity duration-200 hover:opacity-90 cursor-pointer no-underline ${className}`}
-        style={{ background: 'linear-gradient(123deg, #0F1A3E 7%, #3B82F6 37%, #8B5CF6 72%, #06B6D4 100%)', boxShadow: '0px 4px 12px rgba(59,130,246,0.35), 4px 4px 12px rgba(139,92,246,0.4) inset', outline: '2px solid white', outlineOffset: '-3px' }}>
-        {children} <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
-      </a>
-    );
-
-    // Character‑by‑character reveal
-    const Char = ({ char, index, totalChars, progress }) => {
-      const start = index / totalChars, end = (index + 1) / totalChars;
-      const opacity = useTransform(progress, [start, end], [0.2, 1], { clamp: true });
-      return <motion.span style={{ opacity, display: 'inline', whiteSpace: 'pre' }}>{char}</motion.span>;
-    };
-    const AnimatedText = ({ text, className = "", style = {} }) => {
-      const containerRef = React.useRef(null);
-      const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start 0.8', 'end 0.2'] });
-      return <p ref={containerRef} className={className} style={style}>{text.split('').map((char, i) => <Char key={i} char={char} index={i} totalChars={text.length} progress={scrollYProgress} />)}</p>;
-    };
-
-    // ── 3D PARTICLE NETWORK BACKGROUND ──
-    const ParticleBackground = () => {
-      const mountRef = React.useRef(null);
-      React.useEffect(() => {
-        let animationId;
-        import('three').then((THREE) => {
-          const scene = new THREE.Scene();
-          const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-          camera.position.z = 40;
-          
-          const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-          renderer.setSize(window.innerWidth, window.innerHeight);
-          renderer.setClearColor(0x000000, 0);
-          mountRef.current.appendChild(renderer.domElement);
-
-          const particleCount = 60;
-          const positions = new Float32Array(particleCount * 3);
-          const geometry = new THREE.BufferGeometry();
-          geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-          const material = new THREE.PointsMaterial({
-            color: 0x3B82F6,
-            size: 0.2,
-            blending: THREE.AdditiveBlending,
-            transparent: true,
-          });
-          const points = new THREE.Points(geometry, material);
-          scene.add(points);
-
-          const lineGeometry = new THREE.BufferGeometry();
-          const linePositions = [];
-          const lineMaterial = new THREE.LineBasicMaterial({
-            color: 0x3B82F6,
-            transparent: true,
-            opacity: 0.15,
-            blending: THREE.AdditiveBlending,
-          });
-          let lines;
-
-          const updateLines = () => {
-            if (lines) scene.remove(lines);
-            linePositions.length = 0;
-            const pts = [];
-            for (let i = 0; i < particleCount; i++) {
-              pts.push({ x: positions[i*3], y: positions[i*3+1], z: positions[i*3+2] });
-            }
-            for (let i = 0; i < particleCount; i++) {
-              for (let j = i+1; j < particleCount; j++) {
-                const dx = pts[i].x - pts[j].x;
-                const dy = pts[i].y - pts[j].y;
-                const dz = pts[i].z - pts[j].z;
-                const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-                if (dist < 8) {
-                  linePositions.push(pts[i].x, pts[i].y, pts[i].z);
-                  linePositions.push(pts[j].x, pts[j].y, pts[j].z);
-                }
-              }
-            }
-            if (linePositions.length > 0) {
-              lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-              lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-              scene.add(lines);
-            }
-          };
-
-          for (let i = 0; i < particleCount; i++) {
-            const radius = 12 + Math.random() * 8;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-            positions[i*3] = radius * Math.sin(phi) * Math.cos(theta);
-            positions[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
-            positions[i*3+2] = radius * Math.cos(phi);
-          }
-          updateLines();
-
-          const handleResize = () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-          };
-          window.addEventListener('resize', handleResize);
-
-          const animate = () => {
-            animationId = requestAnimationFrame(animate);
-            scene.rotation.y += 0.0003;
-            scene.rotation.x += 0.0001;
-            for (let i = 0; i < particleCount; i++) {
-              positions[i*3] += Math.sin(Date.now() * 0.001 + i) * 0.005;
-              positions[i*3+1] += Math.cos(Date.now() * 0.001 + i) * 0.005;
-              positions[i*3+2] += Math.sin(Date.now() * 0.0005 + i) * 0.005;
-            }
-            geometry.attributes.position.needsUpdate = true;
-            updateLines();
-            renderer.render(scene, camera);
-          };
-          animate();
-
-          return () => {
-            cancelAnimationFrame(animationId);
-            window.removeEventListener('resize', handleResize);
-            mountRef.current?.removeChild(renderer.domElement);
-            renderer.dispose();
-          };
-        });
-      }, []);
-      return <div ref={mountRef} className="absolute inset-0 z-0 pointer-events-none" />;
-    };
-
-    // ── MARQUEE IMAGES ──
-    const techImages = [
-      'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1535378917042-10a22c88ab29?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1558494949-ef010c797e83?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1515879218367-8466d910bd8a?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1531746790095-8e8f4d9b4c99?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1562564055-71e051d33c19?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1559028012-481c04fa702d?w=600&h=400&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=400&fit=crop&q=80',
-    ];
-    const row1 = techImages.slice(0,11), row2 = techImages.slice(11,21);
-    const row1Triple = [...row1, ...row1, ...row1], row2Triple = [...row2, ...row2, ...row2];
-
-    const MarqueeSection = () => {
-      const sectionRef = React.useRef(null), row1Ref = React.useRef(null), row2Ref = React.useRef(null);
-      const [offset, setOffset] = React.useState(0);
-      React.useEffect(() => {
-        const handleScroll = () => {
-          const section = sectionRef.current; if (!section) return;
-          const top = section.offsetTop;
-          setOffset((window.scrollY - top + window.innerHeight) * 0.3);
+        // ── REUSABLE COMPONENTS ──
+        const FadeIn = ({ children, delay = 0, duration = 0.7, x = 0, y = 30, className = "", as: Tag = "div" }) => {
+            const MotionTag = motion[Tag] || motion.div;
+            return (
+                <MotionTag
+                    initial={{ opacity: 0, y, x }}
+                    whileInView={{ opacity: 1, y: 0, x: 0 }}
+                    viewport={{ once: false, margin: "50px", amount: 0.1 }}
+                    transition={{ delay, duration, ease: [0.25, 0.1, 0.25, 1] }}
+                    className={className}
+                >
+                    {children}
+                </MotionTag>
+            );
         };
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-      }, []);
-      React.useEffect(() => {
-        if (row1Ref.current) row1Ref.current.style.transform = `translateX(${offset - 200}px)`;
-        if (row2Ref.current) row2Ref.current.style.transform = `translateX(${-(offset - 200)}px)`;
-      }, [offset]);
-      return (
-        <section ref={sectionRef} className="bg-[#0C0C0C] pt-24 sm:pt-32 md:pt-40 pb-10 overflow-hidden">
-          <div className="flex gap-3 mb-3" ref={row1Ref} style={{willChange:'transform'}}>
-            {row1Triple.map((src,i)=><img key={`r1-${i}`} src={src} alt="" loading="lazy" className="w-[300px] h-[200px] sm:w-[380px] sm:h-[250px] md:w-[420px] md:h-[270px] rounded-2xl object-cover flex-shrink-0" />)}
-          </div>
-          <div className="flex gap-3" ref={row2Ref} style={{willChange:'transform'}}>
-            {row2Triple.map((src,i)=><img key={`r2-${i}`} src={src} alt="" loading="lazy" className="w-[300px] h-[200px] sm:w-[380px] sm:h-[250px] md:w-[420px] md:h-[270px] rounded-2xl object-cover flex-shrink-0" />)}
-          </div>
-        </section>
-      );
-    };
 
-    // ── HERO SECTION (no magnet image, clean layout) ──
-    const HeroSection = () => (
-      <section className="h-screen flex flex-col overflow-hidden relative bg-[#0C0C0C]">
-        <ParticleBackground />
-        <div className="relative z-10 flex-1 flex flex-col justify-between px-4 sm:px-6 md:px-10 pt-4 sm:pt-6 md:pt-8 pb-6 sm:pb-8">
-          <FadeIn delay={0} y={-20} className="w-full">
-            <nav className="flex justify-between items-center">
-              {['Services','How It Works','About','Contact'].map(link => (
-                <a key={link} href={`#${link.toLowerCase().replace(/\s+/g,'-')}`} className="text-[#D7E2EA] font-medium uppercase tracking-wider text-xs sm:text-sm md:text-lg lg:text-[1.3rem] transition-opacity duration-200 hover:opacity-70">{link}</a>
-              ))}
-            </nav>
-          </FadeIn>
+        const PrimaryButton = ({ className = "", children, href = "#" }) => (
+            <a href={href}
+                className={`rounded-full text-white font-medium uppercase tracking-widest flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 text-xs sm:text-sm md:text-base transition-opacity duration-200 hover:opacity-90 cursor-pointer no-underline ${className}`}
+                style={{
+                    background: 'linear-gradient(123deg, #0F1A3E 7%, #3B82F6 37%, #8B5CF6 72%, #06B6D4 100%)',
+                    boxShadow: '0px 4px 12px rgba(59,130,246,0.35), 4px 4px 12px rgba(139,92,246,0.4) inset',
+                    outline: '2px solid white',
+                    outlineOffset: '-3px'
+                }}>
+                {children} <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </a>
+        );
 
-          <div className="flex-1 flex flex-col justify-center gap-6 sm:gap-8">
-            <div className="overflow-hidden">
-              <FadeIn delay={0.15} y={40}>
-                <h1 className="hero-heading-brand font-black uppercase tracking-tight leading-[0.95] text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8vw] xl:text-[7vw]">
-                  Your business,<br />on autopilot
-                </h1>
-              </FadeIn>
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mt-4">
-              <FadeIn delay={0.35} y={20} className="sm:flex-1">
-                <p className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-xs sm:text-sm md:text-base max-w-[280px] sm:max-w-[320px] md:max-w-[400px]">
-                  We build custom automations that handle your inbox, meetings, leads, and customer conversations — so you can focus on growth, not busywork.
+        // Character‑by‑character reveal
+        const Char = ({ char, index, totalChars, progress }) => {
+            const start = index / totalChars,
+                end = (index + 1) / totalChars;
+            const opacity = useTransform(progress, [start, end], [0.2, 1], { clamp: true });
+            return <motion.span style={{ opacity, display: 'inline', whiteSpace: 'pre' }}>{char}</motion.span>;
+        };
+        const AnimatedText = ({ text, className = "", style = {} }) => {
+            const containerRef = React.useRef(null);
+            const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start 0.8', 'end 0.2'] });
+            return (
+                <p ref={containerRef} className={className} style={style}>
+                    {text.split('').map((char, i) => (
+                        <Char key={i} char={char} index={i} totalChars={text.length} progress={scrollYProgress} />
+                    ))}
                 </p>
-              </FadeIn>
-              <FadeIn delay={0.5} y={20} className="flex flex-col items-start sm:items-end gap-3">
-                <PrimaryButton href="#final-cta">See How We Free Up Your Time</PrimaryButton>
-                <a href="https://www.instagram.com/renvix.co/" target="_blank" rel="noopener" className="flex items-center gap-2 text-[#D7E2EA] font-medium uppercase tracking-wider text-xs sm:text-sm hover:opacity-70 transition-opacity no-underline">
-                  <InstagramIcon className="w-4 h-4 sm:w-5 sm:h-5" /> Chat on Instagram
-                </a>
-                <p className="text-[#D7E2EA] opacity-50 font-light text-xs max-w-[200px] sm:max-w-[220px] leading-tight">
-                  No bots that feel like bots. Just smart workflows tailored to your business.
+            );
+        };
+
+        // ── 3D PARTICLE NETWORK BACKGROUND (FIXED FULL-SCREEN) ──
+        const ParticleBackground = () => {
+            const mountRef = React.useRef(null);
+            React.useEffect(() => {
+                let animationId;
+                let renderer;
+                let scene;
+                let camera;
+                let points;
+                let geometry;
+                let material;
+                let lines;
+                let lineGeometry;
+                let lineMaterial;
+                const particleCount = 60;
+                const positions = new Float32Array(particleCount * 3);
+
+                const cleanupResources = () => {
+                    if (animationId) cancelAnimationFrame(animationId);
+                    if (renderer) {
+                        renderer.dispose();
+                        if (renderer.domElement && renderer.domElement.parentNode) {
+                            renderer.domElement.parentNode.removeChild(renderer.domElement);
+                        }
+                    }
+                    if (geometry) geometry.dispose();
+                    if (material) material.dispose();
+                    if (lineGeometry) lineGeometry.dispose();
+                    if (lineMaterial) lineMaterial.dispose();
+                    if (scene) scene.clear();
+                };
+
+                import('three').then((THREE) => {
+                    scene = new THREE.Scene();
+                    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    camera.position.z = 40;
+
+                    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setClearColor(0x000000, 0);
+                    renderer.domElement.style.position = 'fixed';
+                    renderer.domElement.style.top = '0';
+                    renderer.domElement.style.left = '0';
+                    renderer.domElement.style.pointerEvents = 'none';
+                    renderer.domElement.style.display = 'block';
+
+                    if (mountRef.current) {
+                        mountRef.current.appendChild(renderer.domElement);
+                    }
+
+                    geometry = new THREE.BufferGeometry();
+                    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+                    material = new THREE.PointsMaterial({
+                        color: 0x3B82F6,
+                        size: 0.2,
+                        blending: THREE.AdditiveBlending,
+                        transparent: true,
+                    });
+                    points = new THREE.Points(geometry, material);
+                    scene.add(points);
+
+                    lineGeometry = new THREE.BufferGeometry();
+                    const linePositionsArr = [];
+                    lineMaterial = new THREE.LineBasicMaterial({
+                        color: 0x3B82F6,
+                        transparent: true,
+                        opacity: 0.15,
+                        blending: THREE.AdditiveBlending,
+                    });
+
+                    const updateLines = () => {
+                        if (lines) {
+                            scene.remove(lines);
+                            if (lines.geometry) lines.geometry.dispose();
+                            lines = null;
+                        }
+                        linePositionsArr.length = 0;
+                        const pts = [];
+                        for (let i = 0; i < particleCount; i++) {
+                            pts.push({ x: positions[i * 3], y: positions[i * 3 + 1], z: positions[i * 3 + 2] });
+                        }
+                        for (let i = 0; i < particleCount; i++) {
+                            for (let j = i + 1; j < particleCount; j++) {
+                                const dx = pts[i].x - pts[j].x;
+                                const dy = pts[i].y - pts[j].y;
+                                const dz = pts[i].z - pts[j].z;
+                                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                                if (dist < 8) {
+                                    linePositionsArr.push(pts[i].x, pts[i].y, pts[i].z);
+                                    linePositionsArr.push(pts[j].x, pts[j].y, pts[j].z);
+                                }
+                            }
+                        }
+                        if (linePositionsArr.length > 0) {
+                            const lg = new THREE.BufferGeometry();
+                            lg.setAttribute('position', new THREE.Float32BufferAttribute(linePositionsArr, 3));
+                            lines = new THREE.LineSegments(lg, lineMaterial);
+                            scene.add(lines);
+                        }
+                    };
+
+                    for (let i = 0; i < particleCount; i++) {
+                        const radius = 12 + Math.random() * 8;
+                        const theta = Math.random() * Math.PI * 2;
+                        const phi = Math.acos(2 * Math.random() - 1);
+                        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+                        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                        positions[i * 3 + 2] = radius * Math.cos(phi);
+                    }
+                    updateLines();
+
+                    const handleResize = () => {
+                        if (!renderer) return;
+                        renderer.setSize(window.innerWidth, window.innerHeight);
+                        camera.aspect = window.innerWidth / window.innerHeight;
+                        camera.updateProjectionMatrix();
+                    };
+                    window.addEventListener('resize', handleResize);
+
+                    const animate = () => {
+                        animationId = requestAnimationFrame(animate);
+                        scene.rotation.y += 0.0003;
+                        scene.rotation.x += 0.0001;
+                        const now = Date.now();
+                        for (let i = 0; i < particleCount; i++) {
+                            positions[i * 3] += Math.sin(now * 0.001 + i) * 0.005;
+                            positions[i * 3 + 1] += Math.cos(now * 0.001 + i) * 0.005;
+                            positions[i * 3 + 2] += Math.sin(now * 0.0005 + i) * 0.005;
+                        }
+                        geometry.attributes.position.needsUpdate = true;
+                        updateLines();
+                        if (renderer) renderer.render(scene, camera);
+                    };
+                    animate();
+
+                    return () => {
+                        window.removeEventListener('resize', handleResize);
+                        cleanupResources();
+                    };
+                }).catch((err) => {
+                    console.error('Failed to load Three.js:', err);
+                });
+
+                return () => {
+                    cleanupResources();
+                };
+            }, []);
+            return <div ref={mountRef} className="particle-fixed-container" />;
+        };
+
+        // ── MARQUEE IMAGES ──
+        const techImages = [
+            'https://picsum.photos/seed/renvix-tech-01/800/500',
+            'https://picsum.photos/seed/renvix-tech-02/800/500',
+            'https://picsum.photos/seed/renvix-tech-03/800/500',
+            'https://picsum.photos/seed/renvix-tech-04/800/500',
+            'https://picsum.photos/seed/renvix-tech-05/800/500',
+            'https://picsum.photos/seed/renvix-tech-06/800/500',
+            'https://picsum.photos/seed/renvix-tech-07/800/500',
+            'https://picsum.photos/seed/renvix-tech-08/800/500',
+            'https://picsum.photos/seed/renvix-tech-09/800/500',
+            'https://picsum.photos/seed/renvix-tech-10/800/500',
+            'https://picsum.photos/seed/renvix-tech-11/800/500',
+            'https://picsum.photos/seed/renvix-tech-12/800/500',
+            'https://picsum.photos/seed/renvix-tech-13/800/500',
+            'https://picsum.photos/seed/renvix-tech-14/800/500',
+            'https://picsum.photos/seed/renvix-tech-15/800/500',
+            'https://picsum.photos/seed/renvix-tech-16/800/500',
+            'https://picsum.photos/seed/renvix-tech-17/800/500',
+            'https://picsum.photos/seed/renvix-tech-18/800/500',
+            'https://picsum.photos/seed/renvix-tech-19/800/500',
+            'https://picsum.photos/seed/renvix-tech-20/800/500',
+            'https://picsum.photos/seed/renvix-tech-21/800/500',
+        ];
+        const row1Imgs = techImages.slice(0, 11),
+            row2Imgs = techImages.slice(11, 21);
+        const row1Triple = [...row1Imgs, ...row1Imgs, ...row1Imgs],
+            row2Triple = [...row2Imgs, ...row2Imgs, ...row2Imgs];
+
+        const MarqueeSection = () => {
+            const sectionRef = React.useRef(null),
+                row1Ref = React.useRef(null),
+                row2Ref = React.useRef(null);
+            const [offset, setOffset] = React.useState(0);
+            React.useEffect(() => {
+                const handleScroll = () => {
+                    const section = sectionRef.current;
+                    if (!section) return;
+                    const top = section.offsetTop;
+                    setOffset((window.scrollY - top + window.innerHeight) * 0.3);
+                };
+                window.addEventListener('scroll', handleScroll, { passive: true });
+                handleScroll();
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+            React.useEffect(() => {
+                if (row1Ref.current) row1Ref.current.style.transform = `translateX(${offset - 200}px)`;
+                if (row2Ref.current) row2Ref.current.style.transform = `translateX(${-(offset - 200)}px)`;
+            }, [offset]);
+            return (
+                <section ref={sectionRef} className="section-relative bg-[#0C0C0C] pt-20 sm:pt-28 md:pt-36 pb-8 sm:pb-10 overflow-hidden">
+                    <div className="flex gap-3 mb-3" ref={row1Ref} style={{ willChange: 'transform' }}>
+                        {row1Triple.map((src, i) => (
+                            <img key={`r1-${i}`} src={src} alt="" loading="lazy"
+                                className="marquee-img w-[280px] h-[180px] sm:w-[360px] sm:h-[240px] md:w-[420px] md:h-[270px]"
+                                onError={(e) => { e.target.style.background = '#1a1a2e'; e.target.style.minWidth = '280px';
+                                    e.target.style.minHeight = '180px'; }} />
+                        ))}
+                    </div>
+                    <div className="flex gap-3" ref={row2Ref} style={{ willChange: 'transform' }}>
+                        {row2Triple.map((src, i) => (
+                            <img key={`r2-${i}`} src={src} alt="" loading="lazy"
+                                className="marquee-img w-[280px] h-[180px] sm:w-[360px] sm:h-[240px] md:w-[420px] md:h-[270px]"
+                                onError={(e) => { e.target.style.background = '#1a1a2e'; e.target.style.minWidth = '280px';
+                                    e.target.style.minHeight = '180px'; }} />
+                        ))}
+                    </div>
+                </section>
+            );
+        };
+
+        // ── HERO SECTION (clean layout with fixed particle bg) ──
+        const HeroSection = () => (
+            <section className="relative min-h-screen flex flex-col overflow-hidden bg-[#0C0C0C]">
+                <ParticleBackground />
+                <div className="content-layer relative z-10 flex-1 flex flex-col justify-between px-4 sm:px-6 md:px-10 pt-4 sm:pt-6 md:pt-8 pb-6 sm:pb-8">
+                    <FadeIn delay={0} y={-20} className="w-full">
+                        <nav className="flex justify-between items-center flex-wrap gap-y-2">
+                            {['Services', 'How It Works', 'About', 'Contact'].map(link => (
+                                <a key={link} href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
+                                    className="text-[#D7E2EA] font-medium uppercase tracking-wider text-xs sm:text-sm md:text-lg lg:text-[1.3rem] transition-opacity duration-200 hover:opacity-70">{link}</a>
+                            ))}
+                        </nav>
+                    </FadeIn>
+
+                    <div className="flex-1 flex flex-col justify-center gap-6 sm:gap-8 my-8 sm:my-12">
+                        <div className="overflow-hidden">
+                            <FadeIn delay={0.15} y={40}>
+                                <h1 className="hero-heading-brand font-black uppercase tracking-tight leading-[0.9] text-[14vw] sm:text-[11vw] md:text-[9vw] lg:text-[7.5vw] xl:text-[6.5vw]">
+                                    Your business,<br />on autopilot
+                                </h1>
+                            </FadeIn>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mt-2 sm:mt-4">
+                            <FadeIn delay={0.35} y={20} className="sm:flex-1">
+                                <p className="text-[#D7E2EA] font-light uppercase tracking-wide leading-snug text-xs sm:text-sm md:text-base max-w-[280px] sm:max-w-[340px] md:max-w-[420px]">
+                                    We build custom automations that handle your inbox, meetings, leads, and customer conversations — so you can
+                                    focus on growth, not busywork.
+                                </p>
+                            </FadeIn>
+                            <FadeIn delay={0.5} y={20} className="flex flex-col items-start sm:items-end gap-3">
+                                <PrimaryButton href="#final-cta">See How We Free Up Your Time</PrimaryButton>
+                                <a href="https://www.instagram.com/renvix.co/" target="_blank" rel="noopener"
+                                    className="flex items-center gap-2 text-[#D7E2EA] font-medium uppercase tracking-wider text-xs sm:text-sm hover:opacity-70 transition-opacity no-underline">
+                                    <InstagramIcon className="w-4 h-4 sm:w-5 sm:h-5" /> Chat on Instagram
+                                </a>
+                                <p className="text-[#D7E2EA] opacity-50 font-light text-xs max-w-[200px] sm:max-w-[240px] leading-tight">
+                                    No bots that feel like bots. Just smart workflows tailored to your business.
+                                </p>
+                            </FadeIn>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        // ── PAIN SECTION ──
+        const pains = [
+            { title: "Drowning in inbox chaos",
+                desc: "Important emails get buried, responses take hours, and follow-ups slip through the cracks." },
+            { title: "Meetings that eat your day",
+                desc: "You spend more time typing up notes and action items than actually acting on them." },
+            { title: "Lead data is a mess",
+                desc: "Your spreadsheets are full of gaps, duplicates, and missing details, making follow-up a guessing game." },
+        ];
+        const PainSection = () => (
+            <section id="pain" className="section-relative bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28">
+                <FadeIn y={40}>
+                    <h2 className="hero-heading font-black uppercase text-center mb-12 sm:mb-16 md:mb-20" style={{ fontSize: 'clamp(2rem, 6vw, 90px)' }}>
+                        You didn't start a business to play email ping-pong
+                    </h2>
+                </FadeIn>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
+                    {pains.map((p, i) => (
+                        <FadeIn key={i} delay={i * 0.15} y={30}>
+                            <div className="bg-[#141414] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 h-full flex flex-col gap-4 border border-[#2A2A2A]">
+                                <CheckCircleIcon className="w-6 h-6 sm:w-8 sm:h-8 text-[#3B82F6]" />
+                                <h3 className="text-[#D7E2EA] font-semibold text-base sm:text-lg md:text-xl uppercase tracking-wide">{p.title}</h3>
+                                <p className="text-[#D7E2EA] font-light text-sm sm:text-base opacity-70 leading-relaxed">{p.desc}</p>
+                            </div>
+                        </FadeIn>
+                    ))}
+                </div>
+                <div className="text-center mt-8 opacity-50 text-[#D7E2EA] text-xs sm:text-sm font-light">
+                    ... and that's exactly why we built Renvix.
+                </div>
+            </section>
+        );
+
+        // ── SERVICES SECTION ──
+        const services = [
+            { number: '01', name: 'AI Inbox Assistant',
+                desc: 'Automatically triages your emails, drafts replies in your tone, flags urgent messages, and sends you a clean daily briefing.' },
+            { number: '02', name: 'AI Meeting Note Taker',
+                desc: 'Silently joins your calls, transcribes everything, summarizes key points, and extracts action items — so you can just show up and talk.' },
+            { number: '03', name: 'WhatsApp AI Chatbot',
+                desc: 'Handles FAQs, sends product details, and lets customers book appointments or place orders directly in WhatsApp — 24/7, no human needed.' },
+            { number: '04', name: 'Website AI Chatbot + Booking',
+                desc: 'A chat widget that answers visitor questions instantly and books calls straight into your calendar.' },
+            { number: '05', name: 'Lead List Cleanup & Enrichment',
+                desc: 'We\'ll clean your messy spreadsheet, remove duplicates, and fill in missing data with AI.' },
+            { number: '06', name: 'Daily Business Snapshot Report',
+                desc: 'A morning email with your key metrics pulled from your tools, plus an AI commentary highlighting what needs attention.' },
+        ];
+        const ServicesSection = () => (
+            <section id="services" className="section-relative white-curve-top bg-white px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-32 z-[5]">
+                <h2 className="text-[#0C0C0C] font-black uppercase text-center mb-6 sm:mb-10" style={{ fontSize: 'clamp(2rem, 6vw, 80px)' }}>
+                    AI‑powered automations
+                </h2>
+                <p className="text-center text-[#0C0C0C] opacity-60 font-light max-w-xl mx-auto mb-12 sm:mb-16 text-sm sm:text-base">
+                    Every solution is set up, tested, and handed over ready to run. You don't lift a finger.
                 </p>
-              </FadeIn>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    // ── PAIN SECTION ──
-    const pains = [
-      { title: "Drowning in inbox chaos", desc: "Important emails get buried, responses take hours, and follow-ups slip through the cracks." },
-      { title: "Meetings that eat your day", desc: "You spend more time typing up notes and action items than actually acting on them." },
-      { title: "Lead data is a mess", desc: "Your spreadsheets are full of gaps, duplicates, and missing details, making follow-up a guessing game." },
-    ];
-    const PainSection = () => (
-      <section id="pain" className="bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28">
-        <FadeIn y={40}><h2 className="hero-heading font-black uppercase text-center mb-12 sm:mb-16 md:mb-20" style={{fontSize:'clamp(2rem, 6vw, 90px)'}}>You didn’t start a business to play email ping-pong</h2></FadeIn>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
-          {pains.map((p,i) => (
-            <FadeIn key={i} delay={i*0.15} y={30}>
-              <div className="bg-[#141414] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 h-full flex flex-col gap-4 border border-[#2A2A2A]">
-                <CheckCircleIcon className="w-6 h-6 sm:w-8 sm:h-8 text-[#3B82F6]" />
-                <h3 className="text-[#D7E2EA] font-semibold text-base sm:text-lg md:text-xl uppercase tracking-wide">{p.title}</h3>
-                <p className="text-[#D7E2EA] font-light text-sm sm:text-base opacity-70 leading-relaxed">{p.desc}</p>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-        <div className="text-center mt-8 opacity-50 text-[#D7E2EA] text-xs sm:text-sm font-light">... and that’s exactly why we built Renvix.</div>
-      </section>
-    );
-
-    // ── SERVICES SECTION ──
-    const services = [
-      { number:'01', name:'AI Inbox Assistant', desc:'Automatically triages your emails, drafts replies in your tone, flags urgent messages, and sends you a clean daily briefing.' },
-      { number:'02', name:'AI Meeting Note Taker', desc:'Silently joins your calls, transcribes everything, summarizes key points, and extracts action items — so you can just show up and talk.' },
-      { number:'03', name:'WhatsApp AI Chatbot', desc:'Handles FAQs, sends product details, and lets customers book appointments or place orders directly in WhatsApp — 24/7, no human needed.' },
-      { number:'04', name:'Website AI Chatbot + Booking', desc:'A chat widget that answers visitor questions instantly and books calls straight into your calendar.' },
-      { number:'05', name:'Lead List Cleanup & Enrichment', desc:'We\'ll clean your messy spreadsheet, remove duplicates, and fill in missing data with AI.' },
-      { number:'06', name:'Daily Business Snapshot Report', desc:'A morning email with your key metrics pulled from your tools, plus an AI commentary highlighting what needs attention.' },
-    ];
-    const ServicesSection = () => (
-      <section id="services" className="bg-white rounded-t-[30px] sm:rounded-t-[40px] md:rounded-t-[60px] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-32 relative z-[5]">
-        <h2 className="text-[#0C0C0C] font-black uppercase text-center mb-6 sm:mb-10" style={{fontSize:'clamp(2rem, 6vw, 80px)'}}>AI‑powered automations</h2>
-        <p className="text-center text-[#0C0C0C] opacity-60 font-light max-w-xl mx-auto mb-12 sm:mb-16 text-sm sm:text-base">Every solution is set up, tested, and handed over ready to run. You don’t lift a finger.</p>
-        <div className="max-w-5xl mx-auto">
-          {services.map((s,idx) => (
-            <FadeIn key={s.number} delay={idx*0.1} y={20}>
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-10 py-6 sm:py-8 md:py-12" style={{borderBottom: idx<services.length-1?'1px solid rgba(12,12,12,0.1)':'none'}}>
-                <div className="flex-shrink-0"><span className="font-black text-[#0C0C0C] leading-none" style={{fontSize:'clamp(2rem, 5vw, 80px)'}}>{s.number}</span></div>
-                <div className="flex flex-col gap-2 sm:gap-3 pt-1 sm:pt-2">
-                  <h3 className="font-semibold uppercase text-[#0C0C0C] tracking-wide" style={{fontSize:'clamp(1rem, 1.8vw, 1.6rem)'}}>{s.name}</h3>
-                  <p className="font-light leading-relaxed max-w-2xl text-[#0C0C0C]" style={{fontSize:'clamp(0.8rem, 1.2vw, 1.1rem)', opacity:0.55}}>{s.desc}</p>
+                <div className="max-w-5xl mx-auto">
+                    {services.map((s, idx) => (
+                        <FadeIn key={s.number} delay={idx * 0.1} y={20}>
+                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-10 py-6 sm:py-8 md:py-12"
+                                style={{ borderBottom: idx < services.length - 1 ? '1px solid rgba(12,12,12,0.1)' : 'none' }}>
+                                <div className="flex-shrink-0">
+                                    <span className="font-black text-[#0C0C0C] leading-none" style={{ fontSize: 'clamp(2rem, 5vw, 80px)' }}>{s.number}</span>
+                                </div>
+                                <div className="flex flex-col gap-2 sm:gap-3 pt-1 sm:pt-2">
+                                    <h3 className="font-semibold uppercase text-[#0C0C0C] tracking-wide" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.6rem)' }}>
+                                        {s.name}
+                                    </h3>
+                                    <p className="font-light leading-relaxed max-w-2xl text-[#0C0C0C]" style={{ fontSize: 'clamp(0.8rem, 1.2vw, 1.1rem)', opacity: 0.55 }}>
+                                        {s.desc}
+                                    </p>
+                                </div>
+                            </div>
+                        </FadeIn>
+                    ))}
                 </div>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-      </section>
-    );
+            </section>
+        );
 
-    // ── HOW IT WORKS ──
-    const steps = [
-      { step:'01', title:'Tell us the boring stuff', desc:'You describe the repetitive tasks eating your time. We listen, no jargon.' },
-      { step:'02', title:'We build your automation', desc:'Your custom solution is configured, tested, and polished until it works flawlessly.' },
-      { step:'03', title:'You get back to growth', desc:'We hand it over with clear instructions. You enjoy the extra hours and sharper data.' },
-    ];
-    const HowItWorks = () => (
-      <section id="how-it-works" className="bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28">
-        <FadeIn y={40}><h2 className="hero-heading-brand font-black uppercase text-center mb-12 sm:mb-16 md:mb-20" style={{fontSize:'clamp(2rem, 6vw, 80px)'}}>From "I need this" to "it's running"</h2></FadeIn>
-        <div className="max-w-5xl mx-auto flex flex-col gap-4 sm:gap-6">
-          {steps.map((s,i) => (
-            <FadeIn key={s.step} delay={i*0.15} y={30}>
-              <div className="flex items-start gap-4 sm:gap-6 md:gap-8 bg-[#141414] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border border-[#2A2A2A]">
-                <span className="font-black text-[#3B82F6] leading-none flex-shrink-0" style={{fontSize:'clamp(2rem, 6vw, 70px)'}}>{s.step}</span>
-                <div>
-                  <h3 className="text-[#D7E2EA] font-semibold text-lg sm:text-xl md:text-2xl uppercase tracking-wide">{s.title}</h3>
-                  <p className="text-[#D7E2EA] font-light text-sm sm:text-base opacity-70 mt-2">{s.desc}</p>
+        // ── HOW IT WORKS ──
+        const steps = [
+            { step: '01', title: 'Tell us the boring stuff',
+                desc: 'You describe the repetitive tasks eating your time. We listen, no jargon.' },
+            { step: '02', title: 'We build your automation',
+                desc: 'Your custom solution is configured, tested, and polished until it works flawlessly.' },
+            { step: '03', title: 'You get back to growth',
+                desc: 'We hand it over with clear instructions. You enjoy the extra hours and sharper data.' },
+        ];
+        const HowItWorks = () => (
+            <section id="how-it-works" className="section-relative bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28">
+                <FadeIn y={40}>
+                    <h2 className="hero-heading-brand font-black uppercase text-center mb-12 sm:mb-16 md:mb-20" style={{ fontSize: 'clamp(2rem, 6vw, 80px)' }}>
+                        From "I need this" to "it's running"
+                    </h2>
+                </FadeIn>
+                <div className="max-w-5xl mx-auto flex flex-col gap-4 sm:gap-6">
+                    {steps.map((s, i) => (
+                        <FadeIn key={s.step} delay={i * 0.15} y={30}>
+                            <div className="flex items-start gap-4 sm:gap-6 md:gap-8 bg-[#141414] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 border border-[#2A2A2A]">
+                                <span className="font-black text-[#3B82F6] leading-none flex-shrink-0" style={{ fontSize: 'clamp(2rem, 6vw, 70px)' }}>
+                                    {s.step}
+                                </span>
+                                <div>
+                                    <h3 className="text-[#D7E2EA] font-semibold text-lg sm:text-xl md:text-2xl uppercase tracking-wide">{s.title}</h3>
+                                    <p className="text-[#D7E2EA] font-light text-sm sm:text-base opacity-70 mt-2">{s.desc}</p>
+                                </div>
+                            </div>
+                        </FadeIn>
+                    ))}
                 </div>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-      </section>
-    );
+            </section>
+        );
 
-    // ── AUTHORITY SECTION ──
-    const quotes = [
-      { quote: "AI is the most profound technology that humanity will ever develop and work on. If you think about fire, electricity, and the internet, it's like that, but even more profound.", author: "Sundar Pichai", role: "CEO, Google & Alphabet" },
-      { quote: "The first rule of any technology used in a business is that automation applied to an efficient operation will magnify the efficiency. The second is that automation applied to an inefficient operation will magnify the inefficiency.", author: "Bill Gates", role: "Co-founder, Microsoft" },
-      { quote: "AI will not eliminate jobs, but it will transform them. Those who learn to leverage AI to automate the repetitive and scale the creative will define the next generation of business.", author: "Fei-Fei Li", role: "Co-Director, Stanford HAI" },
-      { quote: "Some people call this artificial intelligence, but the reality is this technology will enhance us. Instead of artificial intelligence, I think we'll augment our intelligence.", author: "Ginni Rometty", role: "Former CEO, IBM" }
-    ];
-    const AuthoritySection = () => (
-      <section id="authority" className="bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28">
-        <FadeIn y={40}>
-          <h2 className="hero-heading-brand font-black uppercase text-center mb-6 sm:mb-10" style={{fontSize:'clamp(2rem, 5vw, 70px)'}}>The world’s sharpest minds agree</h2>
-          <p className="text-center text-[#D7E2EA] opacity-60 font-light max-w-xl mx-auto mb-12 sm:mb-16 text-sm sm:text-base">AI isn’t the future — it’s the tool rewriting how modern businesses operate.</p>
-        </FadeIn>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
-          {quotes.map((item, i) => (
-            <FadeIn key={i} delay={i*0.1} y={25}>
-              <div className="bg-[#141414] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 h-full flex flex-col justify-between border border-[#2A2A2A]">
-                <div>
-                  <span className="text-[#3B82F6] text-3xl sm:text-4xl md:text-5xl font-black leading-none">“</span>
-                  <p className="text-[#D7E2EA] text-sm sm:text-base md:text-lg font-light leading-relaxed -mt-4 italic">{item.quote}</p>
+        // ── AUTHORITY SECTION ──
+        const quotes = [
+            { quote: "AI is the most profound technology that humanity will ever develop and work on. If you think about fire, electricity, and the internet, it's like that, but even more profound.",
+                author: "Sundar Pichai", role: "CEO, Google & Alphabet" },
+            { quote: "The first rule of any technology used in a business is that automation applied to an efficient operation will magnify the efficiency. The second is that automation applied to an inefficient operation will magnify the inefficiency.",
+                author: "Bill Gates", role: "Co-founder, Microsoft" },
+            { quote: "AI will not eliminate jobs, but it will transform them. Those who learn to leverage AI to automate the repetitive and scale the creative will define the next generation of business.",
+                author: "Fei-Fei Li", role: "Co-Director, Stanford HAI" },
+            { quote: "Some people call this artificial intelligence, but the reality is this technology will enhance us. Instead of artificial intelligence, I think we'll augment our intelligence.",
+                author: "Ginni Rometty", role: "Former CEO, IBM" }
+        ];
+        const AuthoritySection = () => (
+            <section id="authority" className="section-relative bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28">
+                <FadeIn y={40}>
+                    <h2 className="hero-heading-brand font-black uppercase text-center mb-6 sm:mb-10" style={{ fontSize: 'clamp(2rem, 5vw, 70px)' }}>
+                        The world's sharpest minds agree
+                    </h2>
+                    <p className="text-center text-[#D7E2EA] opacity-60 font-light max-w-xl mx-auto mb-12 sm:mb-16 text-sm sm:text-base">
+                        AI isn't the future — it's the tool rewriting how modern businesses operate.
+                    </p>
+                </FadeIn>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
+                    {quotes.map((item, i) => (
+                        <FadeIn key={i} delay={i * 0.1} y={25}>
+                            <div className="bg-[#141414] rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 h-full flex flex-col justify-between border border-[#2A2A2A]">
+                                <div>
+                                    <span className="text-[#3B82F6] text-3xl sm:text-4xl md:text-5xl font-black leading-none">"</span>
+                                    <p className="text-[#D7E2EA] text-sm sm:text-base md:text-lg font-light leading-relaxed -mt-4 italic">{item.quote}</p>
+                                </div>
+                                <div className="mt-6 pt-4 border-t border-[#222]">
+                                    <p className="text-[#D7E2EA] font-semibold text-sm sm:text-base">{item.author}</p>
+                                    <p className="text-[#D7E2EA] opacity-50 text-xs sm:text-sm font-light">{item.role}</p>
+                                </div>
+                            </div>
+                        </FadeIn>
+                    ))}
                 </div>
-                <div className="mt-6 pt-4 border-t border-[#222]">
-                  <p className="text-[#D7E2EA] font-semibold text-sm sm:text-base">{item.author}</p>
-                  <p className="text-[#D7E2EA] opacity-50 text-xs sm:text-sm font-light">{item.role}</p>
+                <p className="text-center text-[#D7E2EA] opacity-40 font-light text-xs sm:text-sm mt-8 sm:mt-10 max-w-xl mx-auto">
+                    Renvix embodies this philosophy — building automations that don't just replace work, but amplify what your business can achieve.
+                </p>
+            </section>
+        );
+
+        // ── FINAL CTA ──
+        const FinalCTA = () => (
+            <section id="final-cta" className="section-relative bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28 text-center">
+                <FadeIn y={40}>
+                    <h2 className="hero-heading-brand font-black uppercase mb-6" style={{ fontSize: 'clamp(2rem, 6vw, 70px)' }}>
+                        Stop trading time for tasks
+                    </h2>
+                    <p className="text-[#D7E2EA] opacity-70 font-light max-w-xl mx-auto mb-8 text-sm sm:text-base">
+                        We'll map out exactly which processes could be automated for your business — no commitment, no pressure.
+                    </p>
+                </FadeIn>
+                <div className="flex flex-col sm:flex-row justify-center gap-4 items-center">
+                    <PrimaryButton href="#">Book a Free Automation Blueprint Call</PrimaryButton>
+                    <a href="https://www.instagram.com/renvix.co/" target="_blank" rel="noopener"
+                        className="inline-flex items-center gap-2 text-[#D7E2EA] font-medium uppercase tracking-wider text-sm hover:opacity-70 transition-opacity no-underline">
+                        <InstagramIcon className="w-5 h-5" /> DM @renvix.co
+                    </a>
                 </div>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-        <p className="text-center text-[#D7E2EA] opacity-40 font-light text-xs sm:text-sm mt-8 sm:mt-10 max-w-xl mx-auto">Renvix embodies this philosophy — building automations that don’t just replace work, but amplify what your business can achieve.</p>
-      </section>
-    );
+            </section>
+        );
 
-    // ── FINAL CTA ──
-    const FinalCTA = () => (
-      <section id="final-cta" className="bg-[#0C0C0C] px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28 text-center">
-        <FadeIn y={40}>
-          <h2 className="hero-heading-brand font-black uppercase mb-6" style={{fontSize:'clamp(2rem, 6vw, 70px)'}}>Stop trading time for tasks</h2>
-          <p className="text-[#D7E2EA] opacity-70 font-light max-w-xl mx-auto mb-8 text-sm sm:text-base">We’ll map out exactly which processes could be automated for your business — no commitment, no pressure.</p>
-        </FadeIn>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <PrimaryButton href="#">Book a Free Automation Blueprint Call</PrimaryButton>
-          <a href="https://www.instagram.com/renvix.co/" target="_blank" rel="noopener" className="inline-flex items-center gap-2 text-[#D7E2EA] font-medium uppercase tracking-wider text-sm hover:opacity-70 transition-opacity no-underline">
-            <InstagramIcon className="w-5 h-5" /> DM @renvix.co
-          </a>
-        </div>
-      </section>
-    );
+        // ── FOOTER ──
+        const Footer = () => (
+            <footer className="section-relative bg-[#0C0C0C] border-t border-[#222] px-4 sm:px-6 md:px-10 py-8 sm:py-10">
+                <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-[#D7E2EA] opacity-60 font-light text-xs sm:text-sm text-center sm:text-left">
+                    <span>Renvix – AI automations for businesses ready to scale smarter.</span>
+                    <div className="flex gap-4">
+                        <a href="#contact" className="hover:opacity-80 no-underline text-[#D7E2EA]">Contact</a>
+                        <a href="#about" className="hover:opacity-80 no-underline text-[#D7E2EA]">About</a>
+                        <a href="#" className="hover:opacity-80 no-underline text-[#D7E2EA]">Privacy Policy</a>
+                    </div>
+                    <div className="flex gap-3">
+                        <a href="https://www.instagram.com/renvix.co/" target="_blank" rel="noopener" className="hover:opacity-80">DM @renvix.co</a>
+                    </div>
+                    <span>© {new Date().getFullYear()} Renvix. All rights reserved.</span>
+                </div>
+            </footer>
+        );
 
-    // ── FOOTER ──
-    const Footer = () => (
-      <footer className="bg-[#0C0C0C] border-t border-[#222] px-4 sm:px-6 md:px-10 py-8 sm:py-10">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-[#D7E2EA] opacity-60 font-light text-xs sm:text-sm text-center sm:text-left">
-          <span>Renvix – AI automations for businesses ready to scale smarter.</span>
-          <div className="flex gap-4">
-            <a href="#contact" className="hover:opacity-80 no-underline text-[#D7E2EA]">Contact</a>
-            <a href="#about" className="hover:opacity-80 no-underline text-[#D7E2EA]">About</a>
-            <a href="#" className="hover:opacity-80 no-underline text-[#D7E2EA]">Privacy Policy</a>
-          </div>
-          <div className="flex gap-3">
-            <a href="https://www.instagram.com/renvix.co/" target="_blank" rel="noopener" className="hover:opacity-80">DM @renvix.co</a>
-          </div>
-          <span>© {new Date().getFullYear()} Renvix. All rights reserved.</span>
-        </div>
-      </footer>
-    );
+        // ── MAIN APP ──
+        const App = () => (
+            <main className="bg-[#0C0C0C] overflow-x-clip">
+                <HeroSection />
+                <MarqueeSection />
+                <PainSection />
+                <ServicesSection />
+                <HowItWorks />
+                <AuthoritySection />
+                <FinalCTA />
+                <Footer />
+            </main>
+        );
 
-    // ── MAIN APP ──
-    const App = () => (
-      <main className="bg-[#0C0C0C] overflow-x-clip">
-        <HeroSection />
-        <MarqueeSection />
-        <PainSection />
-        <ServicesSection />
-        <HowItWorks />
-        <AuthoritySection />
-        <FinalCTA />
-        <Footer />
-      </main>
-    );
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
